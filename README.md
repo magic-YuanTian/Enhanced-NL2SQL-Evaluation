@@ -19,14 +19,13 @@ pip install sqlite3 uuid pandas
 
 ## Usage
 
-It is very simple to use. 
+It is very simple to use. You only need to provide three inputs:
 
-You only need to provide 3 inputs:
 1. Database schema
 2. Gold (correct) SQL query
 3. Predicted SQL query
 
-Please see the example below. Then you can just call it!
+Please see the example below (focusing on the schema format). Then you can just call it!
 
 ### Example
 
