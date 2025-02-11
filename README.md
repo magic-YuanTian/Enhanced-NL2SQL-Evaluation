@@ -19,26 +19,54 @@ pip install sqlite3 uuid pandas
 
 ## Usage
 
-The framework requires three main inputs:
+It is very simple to use. 
+
+You only need to provide 3 inputs:
 1. Database schema
 2. Gold (correct) SQL query
 3. Predicted SQL query
 
-### Basic Example
+Please see the example below. Then you can just call it!
+
+### Example
 
 ```python
 from nl2sql_eval import enhanced_execution_accuracy
 
 # Your database schema
 schema = {
-    "users": {
+      "ratings": {
         "columns": [
-            {"field": "id", "type": "text"},
-            {"field": "name", "type": "text"},
-            {"field": "age", "type": "integer"}
+          {
+            "field": "foreign key(movie_id) references movies(movie_id)",
+            "type": "integer",
+            "isPrimary": false,
+            "foreign_ref": true
+          },
+          {
+            "field": "rating_id",
+            "type": "integer",
+            "isPrimary": true,
+            "foreign_ref": false
+          },
+      },
+      "movies": {
+        "columns": [
+          {
+            "field": "movie_id",
+            "type": "integer",
+            "isPrimary": true,
+            "foreign_ref": false
+          },
+          {
+            "field": "movie_title",
+            "type": "text",
+            "isPrimary": false,
+            "foreign_ref": false
+          }
         ]
-    }
-}
+      }
+    },
 
 # SQL queries to compare
 sql_gold = "SELECT name FROM users WHERE age > 25"
@@ -46,24 +74,6 @@ sql_predicted = "SELECT name FROM users WHERE age >= 25"
 
 # Get accuracy metrics
 result = enhanced_execution_accuracy(sql_gold, sql_predicted, schema)
-```
-
-### Schema Format
-
-The schema should be provided in the following format:
-
-```json
-{
-    "table_name": {
-        "columns": [
-            {
-                "field": "column_name",
-                "type": "data_type",
-                "foreign_ref": "referenced_table(column)" // Optional
-            }
-        ]
-    }
-}
 ```
 
 ## Output Metrics
@@ -99,23 +109,9 @@ Example output:
 }
 ```
 
-## Key Components
 
-1. **Data Generation**: Creates synthetic data while preserving specified values from queries
-2. **Query Analysis**: Extracts important values and conditions from SQL queries
-3. **Database Management**: Handles temporary database creation and cleanup
-4. **Result Comparison**: Provides detailed metrics on query execution results
 
-## Error Handling
-
-The framework includes robust error handling for:
-- Invalid SQL queries
-- Schema validation
-- Database operations
-- Data type mismatches
-- Foreign key constraints
-
-## Limitations
+## Current Limitations
 
 - Currently supports SQLite databases only
 - Requires valid SQL syntax for both queries
